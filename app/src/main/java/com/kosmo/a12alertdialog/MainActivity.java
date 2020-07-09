@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -227,6 +228,48 @@ public class MainActivity extends AppCompatActivity {
                         //progress.cancel(); //대화창을 무조건 닫아준다.
                     }
                 }, 3000);
+            }
+        });
+
+        //커스텀 대화상자
+        /*
+        순서
+        1. layout폴더에 사용자가 정의한 대화상자 xml파일을 생성한다.
+        2. getLayoutInflater().inflate() 메소드를 통해 레이아웃을
+            인플레이트(전개)한다.
+        3. Builder 객체를 통해 대화창을 설정할 때 setView() 생성자를
+            통해 2번에서 전개한 레이아웃을 대화상자에 적용한다.
+         */
+        btnAllertCustom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //커스텀뷰로 레이아웃 전개함(인플레이션)
+                View view = getLayoutInflater().inflate(R.layout.custom_dialog, null);
+                //대화상자내에 있는 입력상자에서 입력된 내용을 읽어오기 위해 위젯을 가져온다.
+                final EditText sportTxt = (EditText)view.findViewById(R.id.sport_txt);
+
+                new AlertDialog.Builder(v.getContext())
+                        .setView(view)
+                        .setIcon(android.R.drawable.ic_media_play)
+                        .setTitle("커스텀대화상자")
+                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //확인을 눌렀을 때는 입력한 내용을 출력한다.
+                                Toast.makeText(MainActivity.this,
+                                        sportTxt.getText(),
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        })
+                        .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(MainActivity.this,
+                                        "취소를 눌렀습니다.",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .show();
             }
         });
 
